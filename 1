@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Наш класс — 10 "А"</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.3em;
+            max-width: 700px;
+            margin: 0 auto;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 2em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .photo-card {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            aspect-ratio: 1;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+            padding: 20px 15px 15px;
+            font-size: 14px;
+        }
+
+        .admin-panel {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .admin-panel h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            margin-right: 10px;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .student-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .student-card:hover {
+            transform: scale(1.05);
+        }
+
+        .student-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: white;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: #667eea;
+        }
+
+        footer {
+            background: rgba(0,0,0,0.3);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+            font-size: 18px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .api-setup {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .api-setup h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .api-setup ol {
+            margin-left: 20px;
+            color: #856404;
+        }
+
+        .api-setup a {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .success-message {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2em; }
+            .hero p { font-size: 1em; }
+            .section { padding: 25px; }
+            .nav-links { gap: 15px; font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">🎓 10 "А"</div>
+            <ul class="nav-links">
+                <li><a href="#home">Главная</a></li>
+                <li><a href="#gallery">Галерея</a></li>
+                <li><a href="#students">Ученики</a></li>
+                <li><a href="#admin">Админ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <h1>Добро пожаловать на сайт нашего класса!</h1>
+        <p>Здесь мы делимся нашими лучшими моментами, достижениями и воспоминаниями о школьной жизни</p>
+    </section>
+
+    <div class="container">
+        <section class="section" id="gallery">
+            <h2>📸 Фотогалерея</h2>
+            <div class="gallery" id="photoGallery">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Загрузка фотографий...</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="students">
+            <h2>👥 Наши ученики</h2>
+            <div class="students-grid">
+                <div class="student-card">
+                    <div class="student-avatar">А</div>
+                    <h3>Анна</h3>
+                    <p>Староста класса</p>
+                </div>
+                <div class="student-card">
+                    <div class="student-avatar">Б</div>
+                    <h3>Борис</h3>
+                    <p>Спортсмен</p>
+                </div>
+                <div class="student-card">
+                    <div class="student-avatar">В</div>
+                    <h3>Виктория</h3>
+                    <p>Активистка</p>
+                </div>
+                <div class="student-card">
+                    <div class="student-avatar">Г</div>
+                    <h3>Глеб</h3>
+                    <p>Программист</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="admin">
+            <h2>⚙️ Админ-панель</h2>
+            
+            <div class="api-setup" id="apiSetup">
+                <h4>🔑 Настройка API ключей (один раз)</h4>
+                <p>Для работы галереи нужно получить бесплатные API ключи:</p>
+                <ol>
+                    <li><strong>ImgBB API:</strong> Зарегистрируйтесь на <a href="https://imgbb.com" target="_blank">imgbb.com</a> → Перейдите в "API" → Скопируйте ключ</li>
+                    <li><strong>JSONBin API:</strong> Зарегистрируйтесь на <a href="https://jsonbin.io" target="_blank">jsonbin.io</a> → Перейдите в "API Keys" → Скопируйте X-Master-Key</li>
+                </ol>
+                <div class="form-group">
+                    <label>ImgBB API Key:</label>
+                    <input type="text" id="imgbbKey" placeholder="Вставьте ваш ImgBB API ключ">
+                </div>
+                <div class="form-group">
+                    <label>JSONBin X-Master-Key:</label>
+                    <input type="text" id="jsonbinKey" placeholder="Вставьте ваш JSONBin X-Master-Key">
+                </div>
+                <button class="btn" onclick="saveApiKeys()">Сохранить ключи</button>
+            </div>
+
+            <div class="admin-panel" id="adminPanel" style="display: none;">
+                <h3>Добавить новое фото</h3>
+                <form id="photoForm">
+                    <div class="form-group">
+                        <label>Название фото:</label>
+                        <input type="text" id="photoTitle" placeholder="Например: Экскурсия в музей" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Описание:</label>
+                        <textarea id="photoDescription" rows="3" placeholder="Расскажите о событии..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Выберите изображение:</label>
+                        <input type="file" id="photoFile" accept="image/*" required>
+                    </div>
+                    <button type="submit" class="btn" id="uploadBtn">Загрузить фото</button>
+                    <button type="button" class="btn btn-danger" onclick="clearAllPhotos()">Удалить все фото</button>
+                </form>
+                <div class="success-message" id="successMessage"></div>
+                <div class="error-message" id="errorMessage"></div>
+            </div>
+        </section>
+    </div>
+
+    <div class="modal" id="photoModal">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <img id="modalImage" src="" alt="">
+    </div>
+
+    <footer>
+        <p>© 2026 Наш класс. Все права защищены.</p>
+        <p>Сделано с ❤️ для лучших учеников</p>
+    </footer>
+
+    <script>
+        let IMGBB_API_KEY = '';
+        let JSONBIN_API_KEY = '';
+        let JSONBIN_BIN_ID = '';
+
+        // Загрузка API ключей при старте
+        function initApiKeys() {
+            IMGBB_API_KEY = localStorage.getItem('imgbbApiKey') || '';
+            JSONBIN_API_KEY = localStorage.getItem('jsonbinApiKey') || '';
+            JSONBIN_BIN_ID = localStorage.getItem('jsonbinBinId') || '';
+
+            if (IMGBB_API_KEY && JSONBIN_API_KEY) {
+                document.getElementById('apiSetup').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                loadPhotos();
+            } else {
+                document.getElementById('imgbbKey').value = IMGBB_API_KEY;
+                document.getElementById('jsonbinKey').value = JSONBIN_API_KEY;
+            }
+        }
+
+        // Сохранение API ключей
+        function saveApiKeys() {
+            const imgbbKey = document.getElementById('imgbbKey').value.trim();
+            const jsonbinKey = document.getElementById('jsonbinKey').value.trim();
+
+            if (!imgbbKey || !jsonbinKey) {
+                alert('Пожалуйста, заполните оба поля');
+                return;
+            }
+
+            IMGBB_API_KEY = imgbbKey;
+            JSONBIN_API_KEY = jsonbinKey;
+
+            localStorage.setItem('imgbbApiKey', imgbbKey);
+            localStorage.setItem('jsonbinApiKey', jsonbinKey);
+
+            // Создаем bin для хранения списка фото
+            createJsonBin();
+        }
+
+        // Создание bin в JSONBin
+        async function createJsonBin() {
+            try {
+                const response = await fetch('https://api.jsonbin.io/v3/b', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSONBIN_API_KEY
+                    },
+                    body: JSON.stringify([])
+                });
+
+                const data = await response.json();
+                JSONBIN_BIN_ID = data.metadata.id;
+                localStorage.setItem('jsonbinBinId', JSONBIN_BIN_ID);
+
+                document.getElementById('apiSetup').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                
+                alert('✅ API ключи сохранены! Теперь вы можете загружать фото.');
+                loadPhotos();
+            } catch (error) {
+                alert('Ошибка при создании хранилища: ' + error.message);
+            }
+        }
+
+        // Загрузка фото из облака
+        async function loadPhotos() {
+            const gallery = document.getElementById('photoGallery');
+            
+            if (!JSONBIN_BIN_ID) {
+                gallery.innerHTML = '<div class="empty-state"><p>Настройте API ключи для начала работы</p></div>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+                    headers: {
+                        'X-Master-Key': JSONBIN_API_KEY
+                    }
+                });
+
+                const data = await response.json();
+                const photos = data.record || [];
+
+                if (photos.length === 0) {
+                    gallery.innerHTML = `
+                        <div class="empty-state">
+                            <svg fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"/>
+                            </svg>
+                            <p>Пока нет фотографий. Добавьте первое фото через админ-панель!</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                gallery.innerHTML = photos.map(photo => `
+                    <div class="photo-card" onclick="openModal('${photo.url}')">
+                        <img src="${photo.url}" alt="${photo.title}">
+                        <div class="photo-caption">
+                            <strong>${photo.title}</strong>
+                            ${photo.description ? `<br><small>${photo.description}</small>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                gallery.innerHTML = '<div class="empty-state"><p>Ошибка загрузки фотографий</p></div>';
+                console.error('Error loading photos:', error);
+            }
+        }
+
+        // Загрузка фото в ImgBB
+        async function uploadToImgBB(file) {
+            const formData = new FormData();
+            formData.append('image', file);
+            formData.append('key', IMGBB_API_KEY);
+
+            const response = await fetch('https://api.imgbb.com/1/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            
+            if (!data.success) {
+                throw new Error(data.error.message || 'Ошибка загрузки изображения');
+            }
+
+            return data.data.url;
+        }
+
+        // Сохранение списка фото в JSONBin
+        async function savePhotosList(photos) {
+            const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': JSONBIN_API_KEY
+                },
+                body: JSON.stringify(photos)
+            });
+
+            if (!response.ok) {
+                throw new Error('Ошибка сохранения списка фото');
+            }
+        }
+
+        // Обработка формы загрузки фото
+        document.getElementById('photoForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('photoTitle').value;
+            const description = document.getElementById('photoDescription').value;
+            const file = document.getElementById('photoFile').files[0];
+            const uploadBtn = document.getElementById('uploadBtn');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+
+            uploadBtn.disabled = true;
+            uploadBtn.textContent = 'Загрузка...';
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+
+            try {
+                // Загружаем фото в ImgBB
+                const imageUrl = await uploadToImgBB(file);
+
+                // Получаем текущий список фото
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+                    headers: {
+                        'X-Master-Key': JSONBIN_API_KEY
+                    }
+                });
+                const data = await response.json();
+                const photos = data.record || [];
+
+                // Добавляем новое фото
+                photos.unshift({
+                    title: title,
+                    description: description,
+                    url: imageUrl,
+                    date: new Date().toISOString()
+                });
+
+                // Сохраняем обновленный список
+                await savePhotosList(photos);
+
+                successMessage.textContent = '✅ Фото успешно загружено!';
+                successMessage.style.display = 'block';
+                
+                document.getElementById('photoForm').reset();
+                loadPhotos();
+
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 3000);
+
+            } catch (error) {
+                errorMessage.textContent = '❌ Ошибка: ' + error.message;
+                errorMessage.style.display = 'block';
+                console.error('Upload error:', error);
+            } finally {
+                uploadBtn.disabled = false;
+                uploadBtn.textContent = 'Загрузить фото';
+            }
+        });
+
+        // Модальное окно для просмотра фото
+        function openModal(src) {
+            document.getElementById('modalImage').src = src;
+            document.getElementById('photoModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('photoModal').classList.remove('active');
+        }
+
+        document.getElementById('photoModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // Удаление всех фото
+        async function clearAllPhotos() {
+            if (!confirm('Вы уверены, что хотите удалить все фото?')) return;
+
+            try {
+                await savePhotosList([]);
+                loadPhotos();
+                alert('Все фото удалены');
+            } catch (error) {
+                alert('Ошибка удаления: ' + error.message);
+            }
+        }
+
+        // Инициализация при загрузке страницы
+        initApiKeys();
+    </script>
+</body>
+</html>
